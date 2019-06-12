@@ -5930,14 +5930,14 @@ with |targetRealm|, |store|, |range|, |kind| and optional |count|, run these ste
       <dd>
         1. Let |key| be the result of running [=convert a
             key to a value=] with |record|'s key.
-        1. Append |key| to |list|.
+        1. [=list/Append=] |key| to |list|.
       </dd>
 
       <dt>"value"</dt>
       <dd>
         1. Let |serialized| be |record|'s [=/value=].
         1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-        1. Append |value| to |list|.
+        1. [=list/Append=] |value| to |list|.
       </dd>
 
       <dt>"key+value"</dt>
@@ -5947,7 +5947,7 @@ with |targetRealm|, |store|, |range|, |kind| and optional |count|, run these ste
         1. Let |serialized| be |record|'s [=/value=].
         1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
         1. Let |pair| be a [=/list=] containing |key| and |value|.
-        1. Append |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
+        1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
       </dd>
     </dl>
 
@@ -6017,14 +6017,14 @@ To <dfn>retrieve multiple items from an index</dfn> with
       <dd>
         1. Let |key| be the result of running [=convert a
             key to a value=] with |record|'s value.
-        1. Append |key| to |list|.
+        1. [=list/Append=] |key| to |list|.
       </dd>
 
       <dt>"value"</dt>
       <dd>
         1. Let |serialized| be |record|'s [=referenced value=].
         1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-        1. Append |value| to |list|.
+        1. [=list/Append=] |value| to |list|.
       </dd>
 
       <dt>"key+value"</dt>
@@ -6034,7 +6034,7 @@ To <dfn>retrieve multiple items from an index</dfn> with
         1. Let |serialized| be |record|'s [=referenced value=].
         1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
         1. Let |pair| be a [=/list=] containing |key| and |value|.
-        1. Append |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
+        1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
       </dd>
     </dl>
 
