@@ -4324,6 +4324,7 @@ interface IDBCursor {
   void advance([EnforceRange] unsigned long count);
   void continue(optional any key);
   void continuePrimaryKey(any key, any primaryKey);
+  void close();
 
   [NewObject] IDBRequest update(any value);
   [NewObject] IDBRequest delete();
@@ -4367,7 +4368,8 @@ enum IDBCursorDirection {
 The <dfn attribute for=IDBCursor>source</dfn> attribute's getter must
 return **this**'s [=cursor/source=]. This
 attribute never returns null or throws an exception, even if the
-cursor is currently being iterated, has iterated past its end, or its
+cursor is currently being iterated, has iterated past its end,
+{{IDBCursor/close()}} has been called, or its
 [=/transaction=] is not [=transaction/active=].
 
 The <dfn attribute for=IDBCursor>direction</dfn> attribute's getter
@@ -4437,6 +4439,10 @@ return **this**'s [=cursor/request=].
         Advances the cursor to the next [=object-store/record=] in range matching
         or after |key| and |primaryKey|. Throws an "{{InvalidAccessError}}" {{DOMException}}
         if the [=cursor/source=] is not an [=/index=].
+
+    : |cursor| . {{IDBCursor/close()|close}}()
+    ::
+        Signals that the cursor is no longer needed, and that any associated resources can be released.
   </dl>
 </div>
 
@@ -4457,9 +4463,9 @@ invoked, must run these steps:
 1. If **this**'s [=cursor/source=] or [=effective object
     store=] has been deleted, [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
-1. If **this**'s [=cursor/got value flag=] is false, indicating that
-    the cursor is being iterated or has iterated past its end,
-    [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+1. If **this**'s [=cursor/got value flag=] is false
+    (indicating that the cursor is being iterated, has iterated past its end, or that {{IDBCursor/close()}} was called),
+    then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
 1. Set **this**'s [=cursor/got value flag=] to false.
 
@@ -4499,9 +4505,9 @@ invoked, must run these steps:
     [=effective object store=] has been deleted, [=throw=] an
     "{{InvalidStateError}}" {{DOMException}}.
 
-1. If **this**'s [=cursor/got value flag=] is false, indicating that
-    the cursor is being iterated or has iterated past its end,
-    [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+1. If **this**'s [=cursor/got value flag=] is false
+    (indicating that the cursor is being iterated, has iterated past its end, or that {{IDBCursor/close()}} was called),
+    then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
 1. If |key| is given, then:
 
@@ -4564,9 +4570,9 @@ The <dfn method for=IDBCursor>continuePrimaryKey(|key|,
 1. If **this**'s [=cursor/direction=] is not {{"next"}} or {{"prev"}},
     [=throw=] an "{{InvalidAccessError}}" {{DOMException}}.
 
-1. If **this**'s [=cursor/got value flag=] is false, indicating that
-    the cursor is being iterated or has iterated past its end,
-    [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+1. If **this**'s [=cursor/got value flag=] is false
+    (indicating that the cursor is being iterated, has iterated past its end, or that {{IDBCursor/close()}} was called),
+    then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
 1. Let |r| be the result of running [=convert a value to
     a key=] with |key|. Rethrow any exceptions.
@@ -4625,6 +4631,40 @@ The <dfn method for=IDBCursor>continuePrimaryKey(|key|,
   flag=] has been set to false.
 </aside>
 
+<div class=algorithm>
+
+The <dfn method for=IDBCursor>close()</dfn> method, when invoked, must run these steps:
+
+1. Let |transaction| be this [=cursor=]'s
+    [=cursor/transaction=].
+
+1. If |transaction|'s [=transaction/state=] is not [=transaction/active=], then [=throw=] a "{{TransactionInactiveError}}" {{DOMException}}.
+
+1. If this [=cursor=]'s [=cursor/source=] or [=effective object store=] has been deleted, [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+
+1. If this [=cursor=]'s [=cursor/got value flag=] is false
+    (indicating that the cursor is being iterated, has iterated past its end, or that {{IDBCursor/close()}} was called),
+    then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+
+1. Set this [=cursor=]'s [=cursor/got value flag=] to false.
+
+1. Set this [=cursor=]'s [=cursor/key=] to undefined.
+
+1. If this [=cursor=]'s [=cursor/source=] is an [=/index=], then set this [=cursor=]'s [=object store position=] to undefined.
+
+1. If this [=cursor=]'s [=cursor/key only flag=] is false, then set this [=cursor=]'s [=cursor/value=] to undefined.
+
+</div>
+
+<aside class=note>
+  The {{IDBCursor/close()}} method allows web applications to hint to the user agent that the cursor will no longer be iterated, and that any state associated with the cursor can be discarded.
+</aside>
+
+<aside class=advisement>
+  &#x1F6A7;
+  The {{IDBCursor/close()}} method is new in this edition.
+  &#x1F6A7;
+</aside>
 
 
 <div class=note>
@@ -4671,9 +4711,9 @@ invoked, must run these steps:
 1. If **this**'s [=cursor/source=] or [=effective object
     store=] has been deleted, [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
-1. If **this**'s [=cursor/got value flag=] is false, indicating that
-    the cursor is being iterated or has iterated past its end,
-    [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+1. If **this**'s [=cursor/got value flag=] is false
+    (indicating that the cursor is being iterated, has iterated past its end, or that {{IDBCursor/close()}} was called),
+    then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
 1. If **this**'s [=cursor/key only flag=] is true, [=throw=] an
     "{{InvalidStateError}}" {{DOMException}}.
@@ -4737,9 +4777,9 @@ must run these steps:
 1. If **this**'s [=cursor/source=] or [=effective object
     store=] has been deleted, [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
-1. If **this**'s [=cursor/got value flag=] is false, indicating that
-    the cursor is being iterated or has iterated past its end,
-    [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+1. If **this**'s [=cursor/got value flag=] is false
+    (indicating that the cursor is being iterated, has iterated past its end, or that {{IDBCursor/close()}} was called),
+    then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
 1. If **this**'s [=cursor/key only flag=] is true, [=throw=] an
     "{{InvalidStateError}}" {{DOMException}}.
@@ -6814,6 +6854,7 @@ For the revision history of the second edition, see [that document's Revision Hi
 * Added {{IDBCursor/request}} attribute. ([Issue #255](https://github.com/w3c/IndexedDB/issues/255))
 * Removed handling for nonstandard `lastModifiedDate` property of {{File}} objects. ([Issue #215](https://github.com/w3c/IndexedDB/issues/215))
 * Remove escaping {{IDBKeyRange/includes()}} method. ([Issue #294](https://github.com/w3c/IndexedDB/issues/294))
+* Added {{IDBCursor/close()}} method for {{IDBCursor}}. ([Issue #185](https://github.com/w3c/IndexedDB/issues/185))
 
 <!-- ============================================================ -->
 # Acknowledgements # {#acknowledgements}
