@@ -939,6 +939,21 @@ following:
     instead is created automatically when an
     <a event>`upgradeneeded`</a> event is fired.
 
+A [=/transaction=] has a <dfn>durability</dfn> hint. This is a hint to the user agent of whether to prioritize performance or durability when committing the transaction. The [=transaction/durability=] hint is one of the following:
+
+: {{"strict"}}
+:: The user agent may consider that the [=/transaction=] has successfully [=transaction/committed=] only after verifying that all outstanding changes have been successfully written to a persistent storage medium.
+: {{"relaxed"}}
+:: The user agent may consider that the [=/transaction=] has successfully [=transaction/committed=] as soon as all outstanding changes have been written to the operating system, without subsequent verification.
+: {{"default"}}
+:: The user agent should use its default durability behavior for the storage [=/bucket=]. This is the default for [=/transactions=] if not otherwise specified.
+
+<aside class=note>
+  In a typical implementation, {{"strict"}} is a hint to the user agent to flush any operating system I/O buffers before a {{"complete"}} event is fired. While this provides greater confidence that the changes will be persisted in case of subsequent operating system crash or power loss, flushing buffers can take significant time and consume battery life on portable devices.
+
+  Web applications are encouraged to use {{"relaxed"}} for ephemeral data such as caches or quickly changing records, and {{"strict"}} in cases where reducing the risk of data loss outweighs the impact to performance and power. Implementations are encouraged to weigh the durability hint from applications against the impact to users and devices.
+</aside>
+
 A [=/transaction=] optionally has a <dfn>cleanup event loop</dfn>
 which is an [=event loop=].
 
@@ -956,21 +971,6 @@ a [=/transaction=] with [=transaction/mode=] {{"readonly"}}.
 
 A <dfn>read/write transaction</dfn>
 is a [=/transaction=] with [=transaction/mode=] {{"readwrite"}}.
-
-A [=/transaction=] has a <dfn>durability</dfn> hint. This is a hint to the user agent of whether to prioritize performance or durability when committing the transaction.
-
-: {{"strict"}}
-:: The user agent may consider that the [=/transaction=] has successfully [=transaction/committed=] only after verifying that all outstanding changes have been successfully written to a persistent storage medium.
-: {{"relaxed"}}
-:: The user agent may consider that the [=/transaction=] has successfully [=transaction/committed=] as soon as all outstanding changes have been written to the operating system, without subsequent verification.
-: {{"default"}}
-:: The user agent should use its default durability behavior for the storage [=/bucket=].
-
-<aside class=note>
-  In a typical implementation, {{"strict"}} is a hint to the user agent to flush any operating system I/O buffers before a {{"complete"}} event is fired. While this provides greater confidence that the changes will be persisted in case of subsequent operating system crash or power loss, flushing buffers can take significant time and consume battery life on portable devices.
-
-  Web applications are encouraged to use {{"relaxed"}} for ephemeral data such as caches or quickly changing records, and {{"strict"}} in cases where reducing the risk of data loss outweighs the impact to performance and power. Implementations are encouraged to weigh the durability hint from applications against the impact to users and devices.
-</aside>
 
 <!-- ============================================================ -->
 ### Transaction Lifecycle ### {#transaction-lifecycle}
