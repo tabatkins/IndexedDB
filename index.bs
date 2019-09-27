@@ -2713,6 +2713,12 @@ The <dfn method for=IDBDatabase>transaction(|storeNames|, |mode|, |options|)</df
 
 </div>
 
+<aside class=advisement>
+  &#x1F6A7;
+  The {{IDBTransactionOptions/durability}} option is new in this edition.
+  &#x1F6A7;
+</aside>
+
 <aside class=note>
   The created |transaction| will follow the [=transaction/lifetime=]
   rules.
@@ -4880,6 +4886,13 @@ The <dfn attribute for=IDBTransaction>mode</dfn> attribute's getter
 must return **this**'s [=transaction/mode=].
 
 The <dfn attribute for=IDBTransaction>durability</dfn> attribute's getter must return the [=transaction/durability=] of the [=/transaction=].
+
+<aside class=advisement>
+  &#x1F6A7;
+  The {{IDBTransaction/durability}} attribute is new in this edition.
+  &#x1F6A7;
+</aside>
+
 
 The <dfn attribute for=IDBTransaction>db</dfn> attribute's getter must
 return **this**'s [=transaction/connection=]'s associated [=/database=].
