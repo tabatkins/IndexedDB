@@ -4849,6 +4849,11 @@ enum IDBTransactionMode {
         ({{"readonly"}} or {{"readwrite"}}), or {{"versionchange"}} for
         an [=/upgrade transaction=].
 
+    : |transaction| . {{IDBTransaction/durability}}
+    ::
+        Returns the [=transaction/durability=] the transaction was created with
+        ({{"strict"}}, {{"relaxed"}}), or {{"default"}}).
+
     : |transaction| . {{IDBTransaction/db}}
     ::
         Returns the transaction's [=transaction/connection=].
