@@ -3154,7 +3154,6 @@ must run these steps:
         given [=/key=] or [=key range=] in |query|.
 
         If successful, |request|'s {{IDBRequest/result}} will be the count.
-
   </dl>
 </div>
 
@@ -3251,9 +3250,9 @@ method, when invoked, must run these steps:
     [=convert a value to a key range=] with |query|.
     Rethrow any exceptions.
 
-1. Run [=asynchronously execute a request=] and
-    return the {{IDBRequest}} created by these steps. The steps are
-    run with **this** as |source| and
+1. Return the result (an {{IDBRequest}}) of running
+    [=asynchronously execute a request=]
+    with **this** as |source| and
     [=retrieve multiple items from an object store=]
     as |operation|, using the [=current Realm=] as |targetRealm|,
     |store|, |range|, "value" as |kind|, and |count| if given.
@@ -3286,9 +3285,9 @@ method, when invoked, must run these steps:
     [=convert a value to a key range=] with |query|.
     Rethrow any exceptions.
 
-1. Run [=asynchronously execute a request=] and
-    return the {{IDBRequest}} created by these steps. The steps are
-    run with **this** as |source| and
+1. Return the result (an {{IDBRequest}}) of running
+    [=asynchronously execute a request=]
+    with **this** as |source| and
     [=retrieve multiple items from an object store=] as
     |operation|, using the [=current Realm=] as |targetRealm|,
     |store|, |range|, "key" as |kind|, and |count| if given.
@@ -3307,11 +3306,9 @@ will be retrieved.
 The <dfn method for=IDBObjectStore>getAllEntries(|query|, |count|)</dfn>
 method, when invoked, must run these steps:
 
-1. Let |transaction| be this [=/object store handle=]'s
-    [=object-store-handle/transaction=].
+1. Let |transaction| be **this**'s [=object-store-handle/transaction=].
 
-1. Let |store| be this [=/object store handle=]'s
-    [=object-store-handle/object store=].
+1. Let |store| be **this**'s [=object-store-handle/object store=].
 
 1. If |store| has been deleted, [=throw=] an
     "{{InvalidStateError}}" {{DOMException}}.
@@ -3323,16 +3320,16 @@ method, when invoked, must run these steps:
     [=convert a value to a key range=] with |query|.
     Rethrow any exceptions.
 
-1. Run [=asynchronously execute a request=] and
-    return the {{IDBRequest}} created by these steps. The steps are
-    run with this [=/object store handle=] as |source| and
+1. Return the result (an {{IDBRequest}}) of running
+    [=asynchronously execute a request=]
+    with **this** as |source| and
     [=retrieve multiple items from an object store=] as
     |operation|, using the [=current Realm=] as |targetRealm|,
     |store|, |range|, "key+value", and |count| if given.
 
 </div>
 
-The |query| parameter may be a [=/key=] or an {{IDBKeyRange}}
+The |query| parameter may be a [=/key=] or [=key range=] (an {{IDBKeyRange}})
 identifying the [=object-store/records=] to be retrieved. If null or not
 given, an [=unbounded key range=] is used. If |count| is specified
 and there are more than |count| keys in range, only the first |count|
@@ -4048,11 +4045,9 @@ will be retrieved.
 The <dfn method for=IDBIndex>getAllEntries(|query|, |count|)</dfn>
 method, when invoked, must run these steps:
 
-1. Let |transaction| be this [=index handle=]'s
-    [=index-handle/transaction=].
+1. Let |transaction| be **this**'s [=index-handle/transaction=].
 
-1. Let |index| be this [=index handle=]'s
-    [=index-handle/index=].
+1. Let |index| be **this**'s [=index-handle/index=].
 
 1. If |index| or |index|'s [=/object store=] has
     been deleted, [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
@@ -4064,9 +4059,9 @@ method, when invoked, must run these steps:
     [=convert a value to a key range=] with |query|.
     Rethrow any exceptions.
 
-1. Run the steps to [=asynchronously execute a request=] and
-    return the {{IDBRequest}} created by these steps. The steps are
-    run with **this** as |source| and
+1. Return the result (an {{IDBRequest}}) of running
+    [=asynchronously execute a request=]
+    with **this** as |source| and
     [=retrieve multiple items from an index=] as |operation|, using
     the [=current Realm=] as |targetRealm|,
     |index|, |range|, "key+value" as |kind|, and |count| if given.
@@ -5926,29 +5921,25 @@ with |targetRealm|, |store|, |range|, |kind| and optional |count|, run these ste
 1. [=list/For each=] |record| of |records|, switching on |kind|:
 
     <dl class=switch>
-      <dt>"key"</dt>
-      <dd>
-        1. Let |key| be the result of running [=convert a
-            key to a value=] with |record|'s key.
-        1. [=list/Append=] |key| to |list|.
-      </dd>
+      : "key"
+      ::
+          1. Let |key| be the result of running [=convert a key to a value=] with |record|'s key.
+          1. [=list/Append=] |key| to |list|.
 
-      <dt>"value"</dt>
-      <dd>
-        1. Let |serialized| be |record|'s [=/value=].
-        1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-        1. [=list/Append=] |value| to |list|.
-      </dd>
+      : "value"
+      ::
+          1. Let |serialized| be |record|'s [=/value=].
+          1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
+          1. [=list/Append=] |value| to |list|.
 
-      <dt>"key+value"</dt>
-      <dd>
-        1. Let |key| be the result of running [=convert a
-            key to a value=] with |record|'s key.
-        1. Let |serialized| be |record|'s [=/value=].
-        1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-        1. Let |pair| be a [=/list=] containing |key| and |value|.
-        1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
-      </dd>
+      : "key+value"
+      ::
+          1. Let |key| be the result of running [=convert a key to a value=] with |record|'s key.
+          1. Let |serialized| be |record|'s [=/value=].
+          1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
+          1. Let |pair| be a [=/list=] containing |key| and |value|.
+          1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
+
     </dl>
 
 1. Return |list| converted to a [=sequence&lt;any&gt;=].
@@ -6013,34 +6004,31 @@ To <dfn>retrieve multiple items from an index</dfn> with
 1. [=list/For each=] |record| of |records|, switching on |kind|:
 
     <dl class=switch>
-      <dt>"key"</dt>
-      <dd>
-        1. Let |key| be the result of running [=convert a
-            key to a value=] with |record|'s value.
-        1. [=list/Append=] |key| to |list|.
-      </dd>
+      : "key"
+      ::
+          1. Let |key| be the result of running [=convert a key to a value=] with |record|'s value.
+          1. [=list/Append=] |key| to |list|.
 
-      <dt>"value"</dt>
-      <dd>
-        1. Let |serialized| be |record|'s [=referenced value=].
-        1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-        1. [=list/Append=] |value| to |list|.
-      </dd>
+      : "value"
+      ::
+          1. Let |serialized| be |record|'s [=referenced value=].
+          1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
+          1. [=list/Append=] |value| to |list|.
 
-      <dt>"key+value"</dt>
-      <dd>
-        1. Let |key| be the result of running [=convert a
-            key to a value=] with |record|'s value.
-        1. Let |serialized| be |record|'s [=referenced value=].
-        1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
-        1. Let |pair| be a [=/list=] containing |key| and |value|.
-        1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
-      </dd>
+      : "key+value"
+      ::
+          1. Let |key| be the result of running [=convert a key to a value=] with |record|'s value.
+          1. Let |serialized| be |record|'s [=referenced value=].
+          1. Let |value| be [=!=] <a abstract-op>StructuredDeserialize</a>(|serialized|, |targetRealm|).
+          1. Let |pair| be a [=/list=] containing |key| and |value|.
+          1. [=list/Append=] |pair| convered to a [=sequence&lt;any&gt;=] to |list|.
+
     </dl>
 
 1. Return |list| converted to a [=sequence&lt;any&gt;=].
 
 </div>
+
 
 <!-- ============================================================ -->
 ## Object Store Deletion Operation ## {#object-store-deletion-operation}
