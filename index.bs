@@ -4635,24 +4635,23 @@ The <dfn method for=IDBCursor>continuePrimaryKey(|key|,
 
 The <dfn method for=IDBCursor>close()</dfn> method, when invoked, must run these steps:
 
-1. Let |transaction| be this [=cursor=]'s
-    [=cursor/transaction=].
+1. Let |transaction| be **this**'s [=cursor/transaction=].
 
 1. If |transaction|'s [=transaction/state=] is not [=transaction/active=], then [=throw=] a "{{TransactionInactiveError}}" {{DOMException}}.
 
-1. If this [=cursor=]'s [=cursor/source=] or [=effective object store=] has been deleted, [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
+1. If **this**'s [=cursor/source=] or [=effective object store=] has been deleted, then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
-1. If this [=cursor=]'s [=cursor/got value flag=] is false
+1. If **this**'s [=cursor/got value flag=] is false
     (indicating that the cursor is being iterated, has iterated past its end, or that {{IDBCursor/close()}} was called),
     then [=throw=] an "{{InvalidStateError}}" {{DOMException}}.
 
-1. Set this [=cursor=]'s [=cursor/got value flag=] to false.
+1. Set **this**'s [=cursor/got value flag=] to false.
 
-1. Set this [=cursor=]'s [=cursor/key=] to undefined.
+1. Set **this**'s [=cursor/key=] to undefined.
 
-1. If this [=cursor=]'s [=cursor/source=] is an [=/index=], then set this [=cursor=]'s [=object store position=] to undefined.
+1. If **this**'s [=cursor/source=] is an [=/index=], then set **this**'s [=object store position=] to undefined.
 
-1. If this [=cursor=]'s [=cursor/key only flag=] is false, then set this [=cursor=]'s [=cursor/value=] to undefined.
+1. If **this**'s [=cursor/key only flag=] is false, then set **this**'s [=cursor/value=] to undefined.
 
 </div>
 
