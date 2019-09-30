@@ -4890,7 +4890,7 @@ attribute's getter must run these steps:
 The <dfn attribute for=IDBTransaction>mode</dfn> attribute's getter
 must return **this**'s [=transaction/mode=].
 
-The <dfn attribute for=IDBTransaction>durability</dfn> attribute's getter must return the [=transaction/durability=] of the [=/transaction=].
+The <dfn attribute for=IDBTransaction>durability</dfn> attribute's getter must return **this**'s [=transaction/durability=].
 
 <aside class=advisement>
   &#x1F6A7;
