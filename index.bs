@@ -939,7 +939,7 @@ following:
     instead is created automatically when an
     <a event>`upgradeneeded`</a> event is fired.
 
-A [=/transaction=] has a <dfn>durability</dfn> hint. This is a hint to the user agent of whether to prioritize performance or durability when committing the transaction. The [=transaction/durability=] hint is one of the following:
+A [=/transaction=] has a <dfn>durability hint</dfn>. This is a hint to the user agent of whether to prioritize performance or durability when committing the transaction. The [=transaction/durability hint=] is one of the following:
 
 : {{"strict"}}
 :: The user agent may consider that the [=/transaction=] has successfully [=transaction/committed=] only after verifying that all outstanding changes have been successfully written to a persistent storage medium.
@@ -4851,7 +4851,7 @@ enum IDBTransactionMode {
 
     : |transaction| . {{IDBTransaction/durability}}
     ::
-        Returns the [=transaction/durability=] the transaction was created with
+        Returns the [=transaction/durability hint=] the transaction was created with
         ({{"strict"}}, {{"relaxed"}}), or {{"default"}}).
 
     : |transaction| . {{IDBTransaction/db}}
@@ -4890,7 +4890,7 @@ attribute's getter must run these steps:
 The <dfn attribute for=IDBTransaction>mode</dfn> attribute's getter
 must return **this**'s [=transaction/mode=].
 
-The <dfn attribute for=IDBTransaction>durability</dfn> attribute's getter must return **this**'s [=transaction/durability=].
+The <dfn attribute for=IDBTransaction>durability</dfn> attribute's getter must return **this**'s [=transaction/durability hint=].
 
 <aside class=advisement>
   &#x1F6A7;
@@ -5237,7 +5237,7 @@ To <dfn>commit a transaction</dfn> with the |transaction| to commit, run these s
     1. If |transaction|'s [=transaction/state=] is no longer [=transaction/committing=],
         then terminate these steps.
 
-    1. Attempt to write any outstanding changes made by |transaction| to the [=database=], considering |transaction|'s [=transaction/durability=] hint.
+    1. Attempt to write any outstanding changes made by |transaction| to the [=database=], considering |transaction|'s [=transaction/durability hint=].
 
     1. If an error occurs while writing the changes to the [=database=],
         then run [=abort a transaction=] with |transaction| and an
